@@ -1,0 +1,182 @@
+---
+title: "2024_LPI_Test_Analyses"
+author: "Heather Throop"
+format: html
+editor: visual
+editor_options: 
+  chunk_output_type: console
+---
+
+## ReadMe
+
+Heather Throop: This is some preliminary analysis by of the 2004-06-05 field data collected by Isabel Torres and Thomas Ingalls at DBG. I am not sure of the data collection protocols, so all analyses should be taken with some copious grains of salt!
+
+## SetUp
+
+```{r}
+# load packages
+library(here)
+library(tidyverse)
+
+# load dataframes
+BeltTran_df <- read_csv("240605_BeltTran.csv")
+BasalIntercept_df <- read_csv("240605_BasalIntercept.csv")
+Gap_df <- read_csv("240605_Gap.csv")
+LPI_df <- read_csv("240605_LPI.csv")
+```
+
+## LPI
+
+Note: it will be good to add a full legend to figure with the codes. I got confused on the exact meaning of some of the codes, so I haven't tried to add anything here.
+
+### TopLayer
+
+```{r}
+#|label: LPI Top Layer summary
+LPI_TopLayer_summary <- LPI_df |>
+  group_by(TopLayer) |>
+  summarise(count = n()) |>
+  mutate(pct_TopLayer = count / 90 *100) # calculate % TopLayer hits
+
+TopLayer_plot <- ggplot(LPI_TopLayer_summary, aes(x = TopLayer, 
+                                         y = pct_TopLayer)) +
+  geom_col(fill = "skyblue", color = "black") +
+  ylab("Canopy Cover (%)") +
+  xlab("Top Layer") +
+  ggtitle("2024-06-05 DBG LPI") +
+  theme_minimal()
+TopLayer_plot
+
+ggsave(filename = "LPI_toplayer.jpeg", plot = TopLayer_plot, device = "jpeg", width = 4, height = 3)
+```
+
+### Soil Surface Layer
+
+```{r}
+#|label: LPI SoilSurface Summary
+LPI_SoilSurface_summary <- LPI_df |>
+  group_by(SoilSurface) |>
+  summarise(count = n()) |>
+  mutate(pct_SoilSurface = count / 90 *100) # calculate % SoilSurface hits
+
+SoilSurface_plot <- ggplot(LPI_SoilSurface_summary, aes(x = SoilSurface,
+                                                y = pct_SoilSurface)) +
+  geom_col(fill = "skyblue", color = "black") +
+  ylab("Cover (%)") +
+  xlab("Surface Layer") +
+  ggtitle("2024-06-05 DBG LPI\nI'm not sure what the codes mean...") +
+  theme_minimal()
+SoilSurface_plot
+
+ggsave(filename = "LPI_surfacelayer.jpeg", plot = SoilSurface_plot, device = "jpeg", width = 4, height = 3)
+```
+
+We can also do analyses of surface layer relative to top layer (but we might want to change top layer categorization to not require a physical hit? We won't necessarily get full canopy cover in a sparsely vegetated environment.) This will be a good next step to explore.
+
+## Belt Transects
+
+```{r}
+#|label: Belt Transect data workup for shrub canopy cover
+BeltTran_df <- BeltTran_df |>
+  mutate(mean_diam = (Length + Width)/2, #calculate shrub mean diameter
+         area = 3.14159*(mean_diam/2)^2) #calculate shrub canopy area
+
+#The belt transect is 90 m long and 2.5 m wide; define this variable
+belt_area <- 90*2.5
+
+#Belt Transect Canopy Area Summary
+BeltTran_summary <- BeltTran_df |>
+  group_by(Species) |>
+  summarise(count = n(),
+            total_canopy_area = sum(area, na.rm = TRUE)) |>
+  #calculate percent canopy cover
+  mutate(pct_CanopyCover = (total_canopy_area / belt_area)*100) 
+
+#Belt Transect Plot
+BeltTran_plot <- ggplot(BeltTran_summary, aes(x = Species,
+                                                y = pct_CanopyCover)) +
+  geom_col(fill = "skyblue", color = "black") +
+  ylab("Canopy Cover (%)") +
+  xlab("Species") +
+  ggtitle("2024-06-05 DBG Belt Transect") +
+  theme_minimal()
+BeltTran_plot
+
+ggsave(filename = "BeltTran.jpeg", plot = BeltTran_plot, device = "jpeg", width = 4, height = 3)
+```
+
+## Gap Intercept
+
+```{r}
+#|label: GPI data workup
+Gap_df <- Gap_df |>
+  mutate(gap_length = (abs(Start - End))) #calculate gap length
+
+#Gap Length Summary
+#The GPI transect is 90 m long
+Gap_summary <- Gap_df |>
+  group_by(GapType) |>
+  summarise(count = n(),
+            total_gap = sum(gap_length, na.rm = TRUE)) |>
+  mutate(pct_gap_area = total_gap / 90*100, # calculate %gap area 
+         pct_cover = 100 - pct_gap_area) 
+
+#Gap Plot
+Gap_plot <- ggplot(Gap_summary, aes(x = GapType,
+                                                y = pct_cover)) +
+  geom_col(fill = "skyblue", color = "black") +
+  ylab("Cover (%)") +
+  xlab("Gap Type") +
+  ggtitle("2024-06-05 DBG Gap Intercept\n used inverse of gap for cover") +
+  theme_minimal()
+Gap_plot
+
+ggsave(filename = "Gap.jpeg", plot = Gap_plot, device = "jpeg", width = 4, height = 3)
+```
+
+## Basal Intercept
+
+```{r}
+#|label: Basal Intercept data workup
+### HT Note: I changed the value for the End for line 4 (existing avlue was clearly a typo). I made up a value in order to have data to anaylze. 
+BasalIntercept_df <- BasalIntercept_df |>
+  mutate(basal_length = (abs(Start - End))) #calculate gap length
+
+#Basal Intercept Summary
+#The transect is 90 m long
+BasalInt_summary <- BasalIntercept_df |>
+  group_by(InterceptType) |>
+  summarise(count = n(),
+            total_basal = sum(basal_length, na.rm = TRUE)) |>
+  mutate(pct_basal_area = total_basal / 90*100) # calculate %gap area 
+
+#Basal Plot
+Basal_plot <- ggplot(BasalInt_summary, aes(x = InterceptType,
+                                                y = pct_basal_area)) +
+  geom_col(fill = "skyblue", color = "black") +
+  ylab("Cover (%)") +
+  xlab("Basal Intercept Type") +
+  ggtitle("2024-06-05 DBG Basal Intercept") +
+  theme_minimal()
+Basal_plot
+ggsave(filename = "Basal.jpeg", plot = Basal_plot, device = "jpeg", width = 4, height = 3)
+```
+
+The following is exploratory of the relationship between shrub size and litter cover. However, I don't understand the data sufficiently to know if this is a meaningful relationship. Don't trust me on this one!
+
+```{r}
+#|label: Scatter plot with litter
+#HT note: I'm not sure that we should expect a relationship here as I'm not sure about details on data
+litter_scatter_plot <- ggplot(BasalIntercept_df, 
+                              aes(x = basal_length, 
+                                  y = PctLitter, 
+                                  color = InterceptType, 
+                                  shape = InterceptType)) +
+  geom_point(size = 3) +  # Adjust the size of the points
+  labs(x = "Basal Length (m)", y = "Percent Litter", 
+       title = "2024-06-05 DBG Basal Intercept") +
+  theme_minimal() +  # Use a minimal theme
+  theme(legend.title = element_blank())  # Remove the legend title
+litter_scatter_plot
+ggsave(filename = "Basal_v_litter.jpeg", plot = litter_scatter_plot, device = "jpeg", width = 4, height = 3)
+```
