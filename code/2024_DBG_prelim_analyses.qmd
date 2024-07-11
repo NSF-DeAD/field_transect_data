@@ -18,11 +18,11 @@ Heather Throop: This is some preliminary analysis by of the 2004-06-05 field dat
 library(here)
 library(tidyverse)
 
-# load dataframes
-BeltTran_df <- read_csv("240605_BeltTran.csv")
-BasalIntercept_df <- read_csv("240605_BasalIntercept.csv")
-Gap_df <- read_csv("240605_Gap.csv")
-LPI_df <- read_csv("240605_LPI.csv")
+# load dataframes from the DeAD dropbox storage location
+BeltTran_df <- read.csv("https://www.dropbox.com/scl/fi/b01um3zui9bo4h7ledotq/240605_BeltTran.csv?rlkey=kjtv84lznakci4bd8hv4t7xp8&dl=1")
+BasalIntercept_df <- read.csv("https://www.dropbox.com/scl/fi/p4e620d0idm03xw0zk9x3/240605_BasalIntercept.csv?rlkey=guoqzg4xq4el1x8u4c7wpinki&dl=1")
+Gap_df <- read.csv("https://www.dropbox.com/scl/fi/ae40wm7g1fxde11mcu6pr/240605_Gap.csv?rlkey=5ooys8juko7lat0tz1uscrafs&dl=1")
+LPI_df <- read.csv("https://www.dropbox.com/scl/fi/291htbz43yxvqtrty7txj/240605_LPI.csv?rlkey=hbrf6uz3qufd0f39daffmbnlp&dl=1")
 ```
 
 ## LPI
@@ -47,7 +47,7 @@ TopLayer_plot <- ggplot(LPI_TopLayer_summary, aes(x = TopLayer,
   theme_minimal()
 TopLayer_plot
 
-ggsave(filename = "LPI_toplayer.jpeg", plot = TopLayer_plot, device = "jpeg", width = 4, height = 3)
+ggsave(filename = here("output", "LPI_toplayer.jpeg"), plot = TopLayer_plot, device = "jpeg", width = 4, height = 3)
 ```
 
 ### Soil Surface Layer
@@ -68,7 +68,7 @@ SoilSurface_plot <- ggplot(LPI_SoilSurface_summary, aes(x = SoilSurface,
   theme_minimal()
 SoilSurface_plot
 
-ggsave(filename = "LPI_surfacelayer.jpeg", plot = SoilSurface_plot, device = "jpeg", width = 4, height = 3)
+ggsave(filename = here("output", "LPI_surfacelayer.jpeg"), plot = SoilSurface_plot, device = "jpeg", width = 4, height = 3)
 ```
 
 We can also do analyses of surface layer relative to top layer (but we might want to change top layer categorization to not require a physical hit? We won't necessarily get full canopy cover in a sparsely vegetated environment.) This will be a good next step to explore.
@@ -102,7 +102,7 @@ BeltTran_plot <- ggplot(BeltTran_summary, aes(x = Species,
   theme_minimal()
 BeltTran_plot
 
-ggsave(filename = "BeltTran.jpeg", plot = BeltTran_plot, device = "jpeg", width = 4, height = 3)
+ggsave(filename = here("output", "BeltTran.jpeg"), plot = BeltTran_plot, device = "jpeg", width = 4, height = 3)
 ```
 
 ## Gap Intercept
@@ -131,7 +131,7 @@ Gap_plot <- ggplot(Gap_summary, aes(x = GapType,
   theme_minimal()
 Gap_plot
 
-ggsave(filename = "Gap.jpeg", plot = Gap_plot, device = "jpeg", width = 4, height = 3)
+ggsave(filename = here("output", "Gap.jpeg"), plot = Gap_plot, device = "jpeg", width = 4, height = 3)
 ```
 
 ## Basal Intercept
@@ -159,7 +159,7 @@ Basal_plot <- ggplot(BasalInt_summary, aes(x = InterceptType,
   ggtitle("2024-06-05 DBG Basal Intercept") +
   theme_minimal()
 Basal_plot
-ggsave(filename = "Basal.jpeg", plot = Basal_plot, device = "jpeg", width = 4, height = 3)
+ggsave(filename = here("output", "Basal.jpeg"), plot = Basal_plot, device = "jpeg", width = 4, height = 3)
 ```
 
 The following is exploratory of the relationship between shrub size and litter cover. However, I don't understand the data sufficiently to know if this is a meaningful relationship. Don't trust me on this one!
@@ -178,5 +178,5 @@ litter_scatter_plot <- ggplot(BasalIntercept_df,
   theme_minimal() +  # Use a minimal theme
   theme(legend.title = element_blank())  # Remove the legend title
 litter_scatter_plot
-ggsave(filename = "Basal_v_litter.jpeg", plot = litter_scatter_plot, device = "jpeg", width = 4, height = 3)
+ggsave(filename = here("output", "Basal_v_litter.jpeg"), plot = litter_scatter_plot, device = "jpeg", width = 4, height = 3)
 ```
