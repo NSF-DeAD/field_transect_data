@@ -6,8 +6,10 @@ Code is structured so that it will run from within the R project associated with
 
 The project is structured with the following folders:
 
-doc: contains text files and other documentation for the project (NOT CURRENTLY IN USE)/n
+doc: contains text files and other documentation for the project (NOT CURRENTLY IN USE)
+
 output: contains output from analyses such as figures./n
+
 code: source code (.R or .qmd) for analyses in R
 
 Contact Information
