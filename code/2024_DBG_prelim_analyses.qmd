@@ -17,12 +17,39 @@ Heather Throop: This is some preliminary analysis by of the 2004-06-05 field dat
 # load packages
 library(here)
 library(tidyverse)
+library(stringr)
+```
 
-# load dataframes from the DeAD dropbox storage location
-BeltTran_df <- read.csv("https://www.dropbox.com/scl/fi/b01um3zui9bo4h7ledotq/240605_BeltTran.csv?rlkey=kjtv84lznakci4bd8hv4t7xp8&dl=1")
-BasalIntercept_df <- read.csv("https://www.dropbox.com/scl/fi/p4e620d0idm03xw0zk9x3/240605_BasalIntercept.csv?rlkey=guoqzg4xq4el1x8u4c7wpinki&dl=1")
-Gap_df <- read.csv("https://www.dropbox.com/scl/fi/ae40wm7g1fxde11mcu6pr/240605_Gap.csv?rlkey=5ooys8juko7lat0tz1uscrafs&dl=1")
-LPI_df <- read.csv("https://www.dropbox.com/scl/fi/291htbz43yxvqtrty7txj/240605_LPI.csv?rlkey=hbrf6uz3qufd0f39daffmbnlp&dl=1")
+## Load and Merge Data
+
+```{r}
+#|label: load-L1-dataframes
+# Data are currently stored as individual files for each field collection date in a L1 file for each date in the DeAD Dropbox folder
+
+### Code update possibility: separate datafiles can be pulled in with a more automated process.
+
+# 2024-06-05 data
+BeltTran_20240605 <- read.csv("https://www.dropbox.com/scl/fi/b01um3zui9bo4h7ledotq/240605_BeltTran.csv?rlkey=kjtv84lznakci4bd8hv4t7xp8&dl=1")
+BasalIntercept_20240605 <- read.csv("https://www.dropbox.com/scl/fi/p4e620d0idm03xw0zk9x3/240605_BasalIntercept.csv?rlkey=guoqzg4xq4el1x8u4c7wpinki&dl=1")
+Gap_20240605 <- read.csv("https://www.dropbox.com/scl/fi/ae40wm7g1fxde11mcu6pr/240605_Gap.csv?rlkey=5ooys8juko7lat0tz1uscrafs&dl=1")
+LPI_20240605 <- read.csv("https://www.dropbox.com/scl/fi/291htbz43yxvqtrty7txj/240605_LPI.csv?rlkey=hbrf6uz3qufd0f39daffmbnlp&dl=1")
+
+# 2024-05-30 data
+# Note that belt transect data for this date included counts of shrubs only (no size measurements). 
+LPI_20240530 <- read.csv("https://www.dropbox.com/scl/fi/dbzres2kapae2iuc3ut3b/240530_LPI.csv?rlkey=u0w2bbsepr2x83t14bxl1mjif&dl=1")
+Gap_20240530 <- read.csv("https://www.dropbox.com/scl/fi/69hubcwhwg5v70025vu0b/240530_Gap.csv?rlkey=39nbs4hpy5oy9fdy9wityfk5h&dl=1")
+```
+
+```{r}
+#|label: merge-L1-dataframes-to-L2
+
+# combine the LPI data 
+LPI_L2 <- bind_rows(LPI_20240530, LPI_20240605)
+# There are some issues with trailing white spaces in the SoilSurface column. Remove them. 
+LPI_L2$SoilSurface <- str_trim(LPI_L2$SoilSurface)
+
+# combine the Gap data 
+Gap_L2 <- bind_rows(Gap_20240530, Gap_20240605)
 ```
 
 ## LPI
@@ -33,8 +60,8 @@ Note: it will be good to add a full legend to figure with the codes. I got confu
 
 ```{r}
 #|label: LPI Top Layer summary
-LPI_TopLayer_summary <- LPI_df |>
-  group_by(TopLayer) |>
+LPI_TopLayer_summary <- LPI_L2 |>
+  group_by(Line, TopLayer) |>
   summarise(count = n()) |>
   mutate(pct_TopLayer = count / 90 *100) # calculate % TopLayer hits
 
@@ -43,7 +70,8 @@ TopLayer_plot <- ggplot(LPI_TopLayer_summary, aes(x = TopLayer,
   geom_col(fill = "skyblue", color = "black") +
   ylab("Canopy Cover (%)") +
   xlab("Top Layer") +
-  ggtitle("2024-06-05 DBG LPI") +
+  ggtitle("DBG LPI Summary") +
+  facet_grid(rows = vars(Line)) +
   theme_minimal()
 TopLayer_plot
 
@@ -57,7 +85,7 @@ ggsave(filename = here("output", "LPI_toplayer.jpeg"), plot = TopLayer_plot, dev
 LPI_SoilSurface_summary <- LPI_df |>
   group_by(SoilSurface) |>
   summarise(count = n()) |>
-  mutate(pct_SoilSurface = count / 90 *100) # calculate % SoilSurface hits
+  mutate(pct_SoilSurface = count / 90*100) # calculate % SoilSurface hits
 
 SoilSurface_plot <- ggplot(LPI_SoilSurface_summary, aes(x = SoilSurface,
                                                 y = pct_SoilSurface)) +
@@ -72,6 +100,34 @@ ggsave(filename = here("output", "LPI_surfacelayer.jpeg"), plot = SoilSurface_pl
 ```
 
 We can also do analyses of surface layer relative to top layer (but we might want to change top layer categorization to not require a physical hit? We won't necessarily get full canopy cover in a sparsely vegetated environment.) This will be a good next step to explore.
+
+### SoilSurface relative to TopLayer
+
+```{r}
+#|label: Top-vs-Surface-hits
+# This is a quick-n-dirty effort to summarize the relationship between canopy cover and soil surface cover with spring 2024 DBG data. 
+
+TopLayer_sum <- LPI_L2 |>
+  group_by(TopLayer) |>
+  summarise(count = n()) 
+print(TopLayer_sum)
+
+Top_v_Surface_sum <- LPI_L2 |>
+  group_by(TopLayer, SoilSurface) |>
+  summarise(count = n()) |>
+  mutate(TopLayerTotal = sum(count)) 
+print(Top_v_Surface_sum)
+
+Top_v_Surface_plot <- ggplot(Top_v_Surface_sum, aes(x = SoilSurface,
+                                                y = count)) +
+  geom_col(fill = "skyblue", color = "black") +
+  ylab("Soil Surface Hits") +
+  xlab("Soil Surface Layer") +
+  ggtitle("Soil Surface Hits by Top Layer\nNeed to change from total hits to percent") +
+  facet_grid(rows = vars(TopLayer)) +
+  theme_minimal()
+Top_v_Surface_plot
+```
 
 ## Belt Transects
 
