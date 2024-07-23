@@ -29,8 +29,8 @@ library(stringr)
 ### Code update possibility: separate datafiles can be pulled in with a more automated process.
 
 # 2024-06-05 data
-BeltTran_20240605 <- read.csv("https://www.dropbox.com/scl/fi/b01um3zui9bo4h7ledotq/240605_BeltTran.csv?rlkey=kjtv84lznakci4bd8hv4t7xp8&dl=1")
-BasalIntercept_20240605 <- read.csv("https://www.dropbox.com/scl/fi/p4e620d0idm03xw0zk9x3/240605_BasalIntercept.csv?rlkey=guoqzg4xq4el1x8u4c7wpinki&dl=1")
+BeltTran_df <- read.csv("https://www.dropbox.com/scl/fi/b01um3zui9bo4h7ledotq/240605_BeltTran.csv?rlkey=kjtv84lznakci4bd8hv4t7xp8&dl=1")
+BasalIntercept_df <- read.csv("https://www.dropbox.com/scl/fi/p4e620d0idm03xw0zk9x3/240605_BasalIntercept.csv?rlkey=guoqzg4xq4el1x8u4c7wpinki&dl=1")
 Gap_20240605 <- read.csv("https://www.dropbox.com/scl/fi/ae40wm7g1fxde11mcu6pr/240605_Gap.csv?rlkey=5ooys8juko7lat0tz1uscrafs&dl=1")
 LPI_20240605 <- read.csv("https://www.dropbox.com/scl/fi/291htbz43yxvqtrty7txj/240605_LPI.csv?rlkey=hbrf6uz3qufd0f39daffmbnlp&dl=1")
 
@@ -82,7 +82,7 @@ ggsave(filename = here("output", "LPI_toplayer.jpeg"), plot = TopLayer_plot, dev
 
 ```{r}
 #|label: LPI SoilSurface Summary
-LPI_SoilSurface_summary <- LPI_df |>
+LPI_SoilSurface_summary <- LPI_L2 |>
   group_by(SoilSurface) |>
   summarise(count = n()) |>
   mutate(pct_SoilSurface = count / 90*100) # calculate % SoilSurface hits
@@ -165,7 +165,10 @@ ggsave(filename = here("output", "BeltTran.jpeg"), plot = BeltTran_plot, device 
 
 ```{r}
 #|label: GPI data workup
-Gap_df <- Gap_df |>
+
+### whoa ... something funny happened here and they are flipped around...
+
+Gap_df <- Gap_L2 |>
   mutate(gap_length = (abs(Start - End))) #calculate gap length
 
 #Gap Length Summary
