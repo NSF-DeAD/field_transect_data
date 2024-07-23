@@ -115,15 +115,16 @@ print(TopLayer_sum)
 Top_v_Surface_sum <- LPI_L2 |>
   group_by(TopLayer, SoilSurface) |>
   summarise(count = n()) |>
-  mutate(TopLayerTotal = sum(count)) 
+  mutate(TopLayerTotal = sum(count),
+         pct_surface_hits = count/TopLayerTotal *100) 
 print(Top_v_Surface_sum)
 
 Top_v_Surface_plot <- ggplot(Top_v_Surface_sum, aes(x = SoilSurface,
-                                                y = count)) +
+                                                y = pct_surface_hits)) +
   geom_col(fill = "skyblue", color = "black") +
-  ylab("Soil Surface Hits") +
+  ylab("Soil Surface Hits (%)") +
   xlab("Soil Surface Layer") +
-  ggtitle("Soil Surface Hits by Top Layer\nNeed to change from total hits to percent") +
+  ggtitle("Distribution of Soil Surface Hits by Top Layer") +
   facet_grid(rows = vars(TopLayer)) +
   theme_minimal()
 Top_v_Surface_plot
