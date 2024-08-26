@@ -4,7 +4,8 @@ This repo contains shared documentation, data, results, and code for 2024 prelim
 
 Datasets are grouped together into folders with comparable datasets. These folders are:
   
-  #2024_trial_transects: data collected during summer 2024 when testing out methods for transects. 
+  #DBG trials: data collected during summer 2024 when testing out methods for transects.
+  #HT_methods_trial: analyses of data fabricated by Heather Throop to test out implications of different LPI methods iterations
 
 Code is structured so that it will run from within the R project associated with the folder that contains the project. Data are pulled from the DeAD Dropbox folder. 
 
@@ -15,6 +16,8 @@ Each dataset folder is structured with the following folders:
 **output**: contains output (e.g., figures, tables) from analyses.
 
 **code**: Source code (.R or .qmd) for analyses and files associated with rendering the code (e.g., html rendering from Quarto files). All analyses for the transect data are in R. 
+
+**2024-08-26 caution:** I've been rearranging folder structure in this repo and have not yet checked referencing withing existing code. Be cautious when running code as it may not currently reference input or output file locations correctly. -Heather Throop
 
 Contact Information
 
