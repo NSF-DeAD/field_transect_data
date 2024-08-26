@@ -1,11 +1,10 @@
 # field_transect_data
 
-This repo contains shared documentation, data, results, and code for 2024 preliminary field transect data collected in the PHX area.
+This repo contains shared documentation, data, results, and code for field transect data collected for the DeAD project.
 
 Datasets are grouped together into folders with comparable datasets. These folders are:
   
-  #DBG trials: data collected during summer 2024 when testing out methods for transects.
-  #HT_methods_trial: analyses of data fabricated by Heather Throop to test out implications of different LPI methods iterations
+  #2024_trial transects: data collected during summer 2024 when testing out methods for transects.
 
 Code is structured so that it will run from within the R project associated with the folder that contains the project. Data are pulled from the DeAD Dropbox folder. 
 
