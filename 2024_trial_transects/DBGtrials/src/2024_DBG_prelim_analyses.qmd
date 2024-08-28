@@ -82,7 +82,7 @@ TopLayer_plot <- ggplot(LPI_TopLayer_summary, aes(x = TopLayer,
   theme_minimal()
 TopLayer_plot
 
-ggsave(filename = here("2024_trials_transects","DBG_trials","output", "LPI_toplayer.jpeg"), plot = TopLayer_plot, device = "jpeg", width = 4, height = 3)
+ggsave(filename = here("2024_trial_transects","DBG_trials","output", "LPI_toplayer.jpeg"), plot = TopLayer_plot, device = "jpeg", width = 4, height = 3)
 ```
 
 ### Soil Surface Layer
@@ -108,7 +108,7 @@ SoilSurface_plot <- ggplot(LPI_SoilSurface_summary, aes(x = SoilSurface,
   theme_minimal()
 SoilSurface_plot
 
-ggsave(filename = here("2024_trials_transects","DBG_trials","output", "LPI_surfacelayer.jpeg"), plot = SoilSurface_plot, device = "jpeg", width = 4, height = 3)
+ggsave(filename = here("2024_trial_transects","DBG_trials","output", "LPI_surfacelayer.jpeg"), plot = SoilSurface_plot, device = "jpeg", width = 4, height = 3)
 ```
 
 Note: We can also do analyses of surface layer relative to top layer with the data that we have - see below. However, we won't necessarily get full canopy cover in a sparsely vegetated environment. We might want to change top layer categorization to not require a physical hit? This will be a good next step to explore.
@@ -170,7 +170,7 @@ BeltTran_plot <- ggplot(BeltTran_summary, aes(x = Species,
   theme_minimal()
 BeltTran_plot
 
-ggsave(filename = here("2024_trials_transects","DBG_trials","output", "BeltTran.jpeg"), plot = BeltTran_plot, device = "jpeg", width = 4, height = 3)
+ggsave(filename = here("2024_trial_transects","DBG_trials","output", "BeltTran.jpeg"), plot = BeltTran_plot, device = "jpeg", width = 4, height = 3)
 ```
 
 ## Gap Intercept
@@ -202,7 +202,7 @@ Gap_plot <- ggplot(Gap_summary, aes(x = GapType,
   theme_minimal()
 Gap_plot
 
-ggsave(filename = here("2024_trials_transects","DBG_trials","output", "Gap.jpeg"), plot = Gap_plot, device = "jpeg", width = 4, height = 3)
+ggsave(filename = here("2024_trial_transects","DBG_trials","output", "Gap.jpeg"), plot = Gap_plot, device = "jpeg", width = 4, height = 3)
 ```
 
 ## Basal Intercept
@@ -230,7 +230,7 @@ Basal_plot <- ggplot(BasalInt_summary, aes(x = InterceptType,
   ggtitle("2024-06-05 DBG Basal Intercept") +
   theme_minimal()
 Basal_plot
-ggsave(filename = here("2024_trials_transects","DBG_trials","output", "Basal.jpeg"), plot = Basal_plot, device = "jpeg", width = 4, height = 3)
+ggsave(filename = here("2024_trial_transects","DBG_trials","output", "Basal.jpeg"), plot = Basal_plot, device = "jpeg", width = 4, height = 3)
 ```
 
 The following is exploratory of the relationship between shrub size and litter cover. However, I don't understand the data sufficiently to know if this is a meaningful relationship. Don't trust me on this one!
@@ -249,5 +249,5 @@ litter_scatter_plot <- ggplot(BasalIntercept_df,
   theme_minimal() +  # Use a minimal theme
   theme(legend.title = element_blank())  # Remove the legend title
 litter_scatter_plot
-ggsave(filename = here("2024_trials_transects","DBG_trials","output", "Basal_v_litter.jpeg"), plot = litter_scatter_plot, device = "jpeg", width = 4, height = 3)
+ggsave(filename = here("2024_trial_transects","DBG_trials","output", "Basal_v_litter.jpeg"), plot = litter_scatter_plot, device = "jpeg", width = 4, height = 3)
 ```
