@@ -17,12 +17,12 @@ Purpose: This is a test of hypothetical data to assess different transect method
 
 Dataset "FakeData1" is based on the following scenario. Numbers represent LPI points, the horizontal line is the transect line, and scribbles on the transect line are litter. SH = shrub, PG = perennial grass, WD = coarse woody debris, R = rock.
 
-The FakeData1 dataset includes several changes from the LPI data collected with standard methods. \
+The FakeData1 dataset includes several changes from the LPI data collected with standard methods.\
 - The upper layer is classified based on the presence of a canopy, regardless of whether the pin hits or not.\
-- An additional variable "Microsite" is collected. This is a categorical variable that captures the relevant Litter Retention Element (e.g., coarse woody debris, rock, rill) that may capture litter, regardless of whether the pin actually hits the LRE. \
+- An additional variable "Microsite" is collected. This is a categorical variable that captures the relevant Litter Retention Element (e.g., coarse woody debris, rock, rill) that may capture litter, regardless of whether the pin actually hits the LRE.\
 - Litter depth (mm) is measured whenever a the pin hits litter.
 
-![](images/IMG_1567 copy.jpg)
+![](https://www.dropbox.com/scl/fi/q3hvbrbluy8rw71ynqavf/2024.08.27_LPI_test.jpg?rlkey=sijvtyknb47cusealwiw2w4aj&dl=1)
 
 ## SetUp
 
