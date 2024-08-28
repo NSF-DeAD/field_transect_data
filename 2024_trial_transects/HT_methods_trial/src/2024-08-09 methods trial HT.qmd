@@ -67,7 +67,7 @@ TopLayer_plot <- ggplot(LPI_TopLayer_summary, aes(x = TopLayer,
   theme_minimal()
 TopLayer_plot
 
-ggsave(filename = here("output", "LPI_toplayer.jpeg"), plot = TopLayer_plot, device = "jpeg", width = 4, height = 3)
+ggsave(filename = here("2024_trial_transects", "HT_methods_trial", "output", "LPI_toplayer.jpeg"), plot = TopLayer_plot, device = "jpeg", width = 4, height = 3)
 ```
 
 ### Soil Surface Layer
@@ -93,7 +93,7 @@ SoilSurface_plot <- ggplot(LPI_SoilSurface_summary, aes(x = SoilSurface,
   theme_minimal()
 SoilSurface_plot
 
-ggsave(filename = here("output", "LPI_surfacelayer.jpeg"), plot = SoilSurface_plot, device = "jpeg", width = 4, height = 3)
+ggsave(filename = here("2024_trial_transects", "HT_methods_trial", "output", "LPI_surfacelayer.jpeg"), plot = SoilSurface_plot, device = "jpeg", width = 4, height = 3)
 ```
 
 ### SoilSurface relative to TopLayer
