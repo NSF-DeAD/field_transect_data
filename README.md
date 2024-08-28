@@ -16,7 +16,7 @@ Each dataset folder is structured with the following folders:
 
 **code**: Source code (.R or .qmd) for analyses and files associated with rendering the code (e.g., html rendering from Quarto files). All analyses for the transect data are in R. 
 
-**2024-08-26 caution:** I've been rearranging folder structure in this repo and have not yet checked referencing withing existing code. Be cautious when running code as it may not currently reference input or output file locations correctly. -Heather Throop
+**2024-08-26 caution:** I've been rearranging folder structure in this repo and have not yet checked referencing withing existing code. Be cautious when running code as it may not currently reference input or output file locations correctly. -Heather Throop1
 
 Contact Information
 
